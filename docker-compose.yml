@@ -1,6 +1,6 @@
 version: "3.0"
 services:
-  mysql:
+  mysql_roseline:
     container_name: ${containernamemysql}
     environment:
       MYSQL_DATABASE: ${containernamewordpress}
@@ -11,10 +11,10 @@ services:
     restart: unless-stopped
     volumes:
       - /usr/local/volumes/${containernamemysql}/:/var/lib/mysql:rw
-  wordpress:
+  wordpress_roseline:
     container_name: ${containernamewordpress}
     depends_on:
-      - mysql
+      - mysql_roseline
     environment:
       LETSENCRYPT_EMAIL: miguekos1233@gmail.com
       LETSENCRYPT_HOST: ${dominio},www.${dominio}
