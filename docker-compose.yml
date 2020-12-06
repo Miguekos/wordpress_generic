@@ -1,0 +1,39 @@
+version: "3.0"
+services:
+  mysql:
+    container_name: ${containernamemysql}
+    environment:
+      MYSQL_DATABASE: ${containernamewordpress}
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+    image: mariadb:latest
+    restart: unless-stopped
+    volumes:
+      - /usr/local/volumes/${containernamemysql}/:/var/lib/mysql:rw
+  wordpress:
+    container_name: ${containernamewordpress}
+    depends_on:
+      - mysql
+    environment:
+      LETSENCRYPT_EMAIL: miguekos1233@gmail.com
+      LETSENCRYPT_HOST: ${dominio},www.${dominio}
+      VIRTUAL_HOST: ${dominio},www.${dominio}
+      WORDPRESS_DB_HOST: ${containernamemysql}:3306
+      WORDPRESS_DB_NAME: ${containernamewordpress}
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_USER: root
+      WORDPRESS_TABLE_PREFIX: wp_
+    image: wordpress:latest
+    logging:
+      options:
+        max-size: 200k
+    restart: unless-stopped
+    volumes:
+      - /usr/local/volumes/${containernamewordpress}/wordpress-core:/var/www/html:rw
+      - ./conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini:rw
+
+networks:
+  default:
+    external:
+      name: nginx-proxy_default
