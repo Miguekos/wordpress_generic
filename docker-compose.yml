@@ -1,6 +1,9 @@
 version: "3.0"
 services:
   mysql_roseline:
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
     container_name: ${containernamemysql}
     environment:
       MYSQL_DATABASE: ${containernamewordpress}
@@ -12,6 +15,9 @@ services:
     volumes:
       - /usr/local/volumes/${containernamemysql}/:/var/lib/mysql:rw
   wordpress_roseline:
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
     container_name: ${containernamewordpress}
     depends_on:
       - mysql_roseline
